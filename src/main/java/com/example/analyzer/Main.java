@@ -7,7 +7,6 @@ import com.example.analyzer.cli.CliParser;
 import java.io.IOException;
 import java.io.PrintStream;
 
-/** Entry point. Keeps System.exit in one place so everything else is testable. */
 public final class Main {
 
     private Main() {}
@@ -16,7 +15,6 @@ public final class Main {
         System.exit(run(args, System.err));
     }
 
-    /** @return process exit code: 0 on success, non-zero on failure. */
     static int run(String[] args, PrintStream err) {
         try {
             CliArguments cli = CliParser.parse(args);

@@ -15,10 +15,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-/**
- * Pipeline: read line -> parse -> offer to each aggregator -> write results.
- * Each stage is an interface so formats / record types can be swapped or added.
- */
 public final class EventStreamAnalyzer {
 
     private final LineParser parser;
@@ -45,7 +41,6 @@ public final class EventStreamAnalyzer {
             lines.forEach(this::processLine);
         }
 
-        // Always write every output file, even if empty ({}).
         for (Aggregator a : aggregators) {
             writer.write(outDir.resolve(a.outputFileName()), a.result());
         }
@@ -53,10 +48,9 @@ public final class EventStreamAnalyzer {
 
     private void processLine(String line) {
         Optional<Map<String, String>> fields = parser.parse(line);
-        if (fields.isEmpty()) return;            // unparseable -> skip silently
+        if (fields.isEmpty()) return;
         for (Aggregator a : aggregators) {
-            if (a.accept(fields.get())) return;  // first aggregator that claims the line wins
+            if (a.accept(fields.get())) return;
         }
-        // matched nothing -> skip silently
     }
 }

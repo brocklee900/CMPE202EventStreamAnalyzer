@@ -3,7 +3,6 @@ package com.example.analyzer.cli;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/** Parses {@code --file <path> [--outdir <dir>]}. */
 public final class CliParser {
 
     public static final String USAGE =

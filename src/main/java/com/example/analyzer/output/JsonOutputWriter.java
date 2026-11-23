@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 
-/** Pretty-printed JSON (Gson's default indent is 2 spaces). Empty map -> {}. */
 public final class JsonOutputWriter implements OutputWriter {
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
