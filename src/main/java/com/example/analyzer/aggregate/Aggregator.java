@@ -10,5 +10,5 @@ public interface Aggregator {
 
     Map<String, Object> result();
 
-    String outputFileName();
+    String name();
 }

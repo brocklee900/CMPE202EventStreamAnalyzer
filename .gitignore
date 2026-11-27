@@ -5,3 +5,4 @@ out/
 .vscode/
 .vs/
 results/
+dependency-reduced-pom.xml

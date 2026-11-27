@@ -1,6 +1,6 @@
 package com.example.analyzer.classify;
 
-import com.example.analyzer.EventStreamAnalyzer;
+import com.example.analyzer.AnalyzerPipeline;
 import com.example.analyzer.model.AccessRecord;
 import com.example.analyzer.model.DeviceEvent;
 import com.example.analyzer.model.EventRecord;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RecordHandlerChainTest {
 
-    private final RecordHandler chain = EventStreamAnalyzer.defaultClassifier();
+    private final RecordHandler chain = AnalyzerPipeline.defaultClassifier();
     private final KeyValueLineParser parser = new KeyValueLineParser();
 
     private Optional<EventRecord> classify(String line) {

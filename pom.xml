@@ -12,6 +12,7 @@
   <properties>
     <maven.compiler.release>17</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <submission.name>FirstName_LastName</submission.name>
   </properties>
 
   <dependencies>
@@ -29,7 +30,7 @@
   </dependencies>
 
   <build>
-    <finalName>analyzer</finalName>
+    <finalName>Vincent_Tran_EventStreamAnalyzer</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -45,9 +46,10 @@
             <phase>package</phase>
             <goals><goal>shade</goal></goals>
             <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>com.example.analyzer.Main</mainClass>
+                  <mainClass>com.example.analyzer.EventStreamAnalyzer</mainClass>
                 </transformer>
               </transformers>
             </configuration>

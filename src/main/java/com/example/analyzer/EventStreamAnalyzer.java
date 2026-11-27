@@ -1,67 +1,32 @@
 package com.example.analyzer;
 
-import com.example.analyzer.aggregate.Aggregator;
-import com.example.analyzer.classify.AccessRecordHandler;
-import com.example.analyzer.classify.DeviceEventHandler;
-import com.example.analyzer.classify.RecordHandler;
-import com.example.analyzer.classify.SensorReadingHandler;
-import com.example.analyzer.output.JsonOutputWriter;
-import com.example.analyzer.output.OutputWriter;
-import com.example.analyzer.parser.KeyValueLineParser;
-import com.example.analyzer.parser.LineParser;
+import com.example.analyzer.cli.CliArguments;
+import com.example.analyzer.cli.CliException;
+import com.example.analyzer.cli.CliParser;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.stream.Stream;
+import java.io.PrintStream;
 
 public final class EventStreamAnalyzer {
 
-    private final LineParser parser;
-    private final RecordHandler classifier;
-    private final List<Aggregator> aggregators;
-    private final OutputWriter writer;
+    private EventStreamAnalyzer() {}
 
-    public EventStreamAnalyzer(LineParser parser, RecordHandler classifier,
-                               List<Aggregator> aggregators, OutputWriter writer) {
-        this.parser = parser;
-        this.classifier = classifier;
-        this.aggregators = aggregators;
-        this.writer = writer;
+    public static void main(String[] args) {
+        System.exit(run(args, System.err));
     }
 
-    public static EventStreamAnalyzer createDefault() {
-        return new EventStreamAnalyzer(
-                new KeyValueLineParser(),
-                defaultClassifier(),
-                List.of(),
-                new JsonOutputWriter());
-    }
-
-    public static RecordHandler defaultClassifier() {
-        return RecordHandler.chain(
-                new SensorReadingHandler(),
-                new DeviceEventHandler(),
-                new AccessRecordHandler());
-    }
-
-    public void run(Path inputFile, Path outDir) throws IOException {
-        Files.createDirectories(outDir);
-
-        try (Stream<String> lines = Files.lines(inputFile, StandardCharsets.UTF_8)) {
-            lines.forEach(this::processLine);
+    static int run(String[] args, PrintStream err) {
+        try {
+            CliArguments cli = CliParser.parse(args);
+            AnalyzerPipeline.createDefault().run(cli.file(), cli.outDir());
+            return 0;
+        } catch (CliException e) {
+            err.println("Error: " + e.getMessage());
+            err.println(CliParser.USAGE);
+            return 1;
+        } catch (IOException e) {
+            err.println("I/O error: " + e.getMessage());
+            return 2;
         }
-
-        for (Aggregator a : aggregators) {
-            writer.write(outDir.resolve(a.outputFileName()), a.result());
-        }
-    }
-
-    private void processLine(String line) {
-        parser.parse(line)
-                .flatMap(classifier::handle)
-                .ifPresent(record -> aggregators.forEach(a -> a.accept(record)));
     }
 }

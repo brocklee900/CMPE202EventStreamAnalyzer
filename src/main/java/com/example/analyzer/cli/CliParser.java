@@ -6,7 +6,7 @@ import java.nio.file.Path;
 public final class CliParser {
 
     public static final String USAGE =
-            "Usage: java -jar analyzer.jar --file <filename.txt> [--outdir <directory>]";
+            "Usage: java -jar EventStreamAnalyzer.jar --file <filename.txt> [--outdir <directory>]";
 
     private CliParser() {}
 

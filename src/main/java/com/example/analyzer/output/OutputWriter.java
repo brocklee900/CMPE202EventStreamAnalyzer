@@ -5,5 +5,5 @@ import java.nio.file.Path;
 import java.util.Map;
 
 public interface OutputWriter {
-    void write(Path file, Map<String, Object> data) throws IOException;
+    void write(Path outDir, String name, Map<String, Object> data) throws IOException;
 }
